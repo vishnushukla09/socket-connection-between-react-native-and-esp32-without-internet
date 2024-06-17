@@ -16,8 +16,8 @@ const App = () => {
  
       const connectToESP32 = () => {
         const socket = TcpSocket.createConnection({
-          port: 80,
-          host: '192.168.4.1',
+          port: port,
+          host: 'ip',
           reuseAddress: true,
         });
 
