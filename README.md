@@ -1,3 +1,8 @@
+in this project i am connecting my esp32 hardware device with react native app using tcp socket i made esp as a access point (hotspot) as a server and react native app as a host .
+
+
+
+
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
 # Getting Started
