@@ -12,17 +12,7 @@ const App = () => {
   const [password, setPassword] = useState('');
   
 
-  const jsonData = [{
-    "id_type": 1,
-    "sl_no":"62",
-    "id":"test_A_1_1_OtherRoom_11",
-    "status":"1"
-  }];
-[]
-  const sendJsonData = () => {
-    setMessageToSend(JSON.stringify(jsonData));
-    console.log(jsonData);
-  };
+
  
       const connectToESP32 = () => {
         const socket = TcpSocket.createConnection({
@@ -37,10 +27,10 @@ const App = () => {
         console.log("connection made");
       });
 
-      // socket.on('Appdata', (Appdata) => {
-      //   setReceivedMessage(Appdata);
-      //   console.log("msg" , Appdata);
-      // });
+      socket.on('Appdata', (Appdata) => {
+      setReceivedMessage(Appdata);
+      console.log("msg" , Appdata);
+       });
 
      let dataBuffer = [];
 
@@ -75,9 +65,6 @@ const App = () => {
       setSocket(socket);
     }, []);
   
-    const handleChange = (Appdata)=>{
-      setMessageToSend(Appdata)
-    }
     const handleSubmit = () => {
       const message = `username:${username},password:${password}`;
       socket.write(message);
@@ -118,7 +105,7 @@ const App = () => {
       />
       <Button title="Submit" onPress={handleSubmit} />
 
-      <Button title="Send JSON Data" onPress={sendJsonData} />
+ 
   
       <Text> {messageToSend}</Text>
       <TextInput
