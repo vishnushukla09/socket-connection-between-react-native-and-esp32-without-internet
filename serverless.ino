@@ -4,8 +4,7 @@
 #include "SPI.h"
 #include <ArduinoJson.h>
 #include <Arduino.h>
-#include "RTClib.h"
-RTC_DS1307 rtc;
+
 
 #include <WiFi.h>
 #include <WiFiServer.h>
@@ -13,8 +12,8 @@ RTC_DS1307 rtc;
 #include <HTTPClient.h>
 
 const char *ssid = "ESP32";
-const char *password = "123456789";
-const int serverPort = 80;
+const char *password = "password";
+const int serverPort = port;
 
 WiFiServer server(serverPort);
 WiFiMulti wifiMulti;
@@ -857,26 +856,7 @@ void device_board_data(unsigned int length, unsigned int command, unsigned int d
   txMode(ackDataArray);
   nRFPowerUp();
 }
-// void device_board_data4(unsigned int length, unsigned int command, unsigned int data1 ,unsigned int data2,unsigned int data3,unsigned int data4,unsigned int data5,unsigned int data6,unsigned int data7, unsigned int device_no ) {
-//   ackDataArray[0] = 0x80;
-//   ackDataArray[1] = length;
-//   ackDataArray[2] = command;
-//   ackDataArray[3] = data1;
-//   ackDataArray[4] = data2;
-//   ackDataArray[5] = data3;
-//   ackDataArray[6] = data4;
-//   ackDataArray[7] = data5;
-//   ackDataArray[8] = data6;
-//   ackDataArray[9] = data7;
-//   ackDataArray[12] = device_no;
-//   ackDataArray[13] = rx_data;
-//   ackDataArray[14] = 0x81;
-//   tx_address[4] =   device_no;
-//   nrf24_tx_address(tx_address);
-//   txMode(ackDataArray);
-//   nRFPowerUp();
-//   Serial.println("device_board_data4");
-// }
+
 unsigned int spi_transfer(unsigned int tx) {
 
   int rs = 0;
@@ -957,61 +937,7 @@ void stringtoint(String Appdata) {
     }
     device_board_data(1, dataArray2[0], dataArray2[1], dataArray2[2]);
   }
-  // if(dataArray1[0] == '23' || dataArray1[0] == 23){
 
-  //       JsonDocument doc; 
-  //       String path =  "/mode_scheduling.json";
-  //       Serial.println("Directory created");   
-
-  //     dataArray2[0] = dataArray1[0]; //command
-  //     dataArray2[1] = dataArray1[2];  // mode number
-  //     dataArray2[2] = dataArray1[3];  // switch status
-  //     dataArray2[3] = 5 ;       // fan status        for multiple fan ------------
-  //     dataArray2[4] = dataArray1[5];  // on time hr
-  //     dataArray2[5] = dataArray1[6];  // on time min
-  //     dataArray2[6] = dataArray1[7];  // off time hr
-  //     dataArray2[7] = dataArray1[8];  // off time min
-  //     dataArray2[8] = dataArray1[1];  // board number
-
-  //       File jsonFile = SD.open(path.c_str(), FILE_WRITE);
-  //       if (jsonFile) {
-  //           serializeJson(doc, jsonFile);
-  //           jsonFile.close();
-  //           Serial.println("Saved mode scheduling successfully");
-
-  //           DateTime now = rtc.now();
-  //           int current_time = now.hour() * 100 + now.minute();
-
-  //           int scheduledOnHour = dataArray1[5];
-  //           int scheduledOnMinute = dataArray1[6];
-
-  //           int scheduledOffHour = dataArray1[7];
-  //           int scheduledOffMinute = dataArray1[8];
-
-  //           if (now.hour() == scheduledOnHour && 
-  //           now.minute() == scheduledOnMinute ){
-  //           Serial.println("Scheduled ON time !");
-            
-  //          Serial.println("data stored in  dataArray2:");
-  //          for (int i = 0; i< arraySize; i++){
-  //          Serial.println( dataArray2[i]);
-  //        }
-  //     Serial.print( dataArray2[1]); 
-  //    device_board_data4(1,  dataArray2[0] ,  dataArray2[1], dataArray2[2], dataArray2[3] , dataArray2[4], dataArray2[5], dataArray2[6], dataArray2[7], dataArray2[8]); 
-  //    }
-
-  //           if (now.hour() == scheduledOffHour &&
-  //           now.minute() == scheduledOffMinute) {
-  //           Serial.println("Scheduled OFF time!");
-  //           Serial.println("data stored in  dataArray2:");
-  //           for (int i = 0; i< arraySize; i++){
-  //           Serial.println( dataArray2[i]);
-  //        }
-  //    Serial.print( dataArray2[1]); 
-  //    device_board_data4(1,  dataArray2[0] ,  dataArray2[1], dataArray2[2], dataArray2[3] , dataArray2[4], dataArray2[5], dataArray2[6], dataArray2[7], dataArray2[8]);   
-  //     }
-  // }
-  // }
   
   delete[] dataArray1;
   delete[] dataArray2;
@@ -1094,39 +1020,9 @@ void flatdetails(WiFiClient client) {
 }
 
 
-// this function is use for validating id , pass then sending flat details data ------------------------------------------------------------
-// void sendJSONDataToClient(WiFiClient client, String Appdata) {
-//   String staticusername = "604_user";
-//   String staticpassword = "QdRj4f";
-//   String receivedusername = "";
-//   String receivedpassword = "";
-
-//   Serial.println(Appdata);
-//   int startIndex = Appdata.indexOf("[\"");
-//   int endIndex = Appdata.indexOf("\",\"");
-//   if (startIndex!= -1 && endIndex!= -1) {
-//     receivedusername = Appdata.substring(startIndex + 2, endIndex);
-//   }
-
-//   startIndex = endIndex + 2;
-//   endIndex = Appdata.indexOf("\"]");
-//   if (startIndex!= -1 && endIndex!= -1) {
-//   receivedpassword = Appdata.substring(startIndex + 1, endIndex );
-//   }
-//   Serial.println(receivedusername);
-//   Serial.println(receivedpassword);
-
-//   if (receivedusername.equals(staticusername) && receivedpassword.equals(staticpassword)) {
-//     Serial.println("ok");
-//      String jsonResponse = "[{\"id\":\"57\",\"firstName\":\"Anand\",\"lastName\":\"null\",\"email\":\"anandraj05006@gmail.com\" ,\"username\":\"604_user\",\"password\":\"QdRj4f\",\"usertype\":\"1\",\"userToken\":\"BuK5Tb\"}]";
-//     client.println(jsonResponse);
-//   }
-// }
-
-
 void sendJSONDataToClient(WiFiClient client, String Appdata) {
-  String staticusername = "604_user";
-  String staticpassword = "QdRj4f";
+  String staticusername = "user";
+  String staticpassword = "password";
   String receivedusername = "";
   String receivedpassword = "";
 
@@ -1148,9 +1044,8 @@ void sendJSONDataToClient(WiFiClient client, String Appdata) {
 
   if (receivedusername.equals(staticusername) && receivedpassword.equals(staticpassword)) {
     Serial.println("ok");
-    String jsonResponse = "[{\"id\":\"57\",\"firstName\":\"Anand\",\"lastName\":\"null\",\"email\":\"anandraj05006@gmail.com\",\"username\":\"604_user\",\"password\":\"QdRj4f\",\"usertype\":\"1\",\"userToken\":\"BuK5Tb\"}]";
+    String jsonResponse = "hello from esp";
     client.println(jsonResponse);
-    Serial.println(jsonResponse);
   }
 }
 
@@ -1266,48 +1161,16 @@ void setup() {
   Serial.println("Server started");
 
 
-  // for user validation -------------------------------------------------------------------------------------------------------------------------------------
-  // if ((wifiMulti.run() == WL_CONNECTED)){
-  //   String tempData;
-  //   tempData = "[{\"Username\":\"11_user\",\"Password\":\"SPiagR\"}]";
-  //   wifiWorking("http://52.66.113.96/i-switch/automation/loginFromApp.php", 1, 0, tempData,"user_credentials.json");
-  // }
-  //   delay(1000);
-
   //for flat details data ----------------------------------------------------------------------------------------------------------------------------------------
   if ((wifiMulti.run() == WL_CONNECTED)) {
     String tempData;
     tempData = "[{\"sl_no\":\"57\"}]";
-    wifiWorking("http://52.66.113.96/i-switch/automation/Flat_details.php", 1, 0, tempData, "flatdetails.json");
+    wifiWorking("Flat_details.php", 1, 0, tempData, "flatdetails.json");
   }
 }
 
 
 void loop() {
-
-  //socket sending and receiving function ----------------------------------------------------------------------------------------------------------------
-  // StaticJsonDocument<512> doc;
-  // DeserializationError error = deserializeJson(doc, Appdata);
-  // WiFiClient client = server.available();
-  // if (client) {
-  //   while (client.connected()) {
-  //     if (client.available() || (millis() - lastMsgTime > timeout)) {
-  //       String Appdata = client.readStringUntil('\r');
-  //       Serial.println(Appdata);
-  //       delay(5000);
-  //     }
-
-  //       sendJSONDataToClient(client, Appdata);
-  //     //  stringtoint(Appdata);
-  //     client.println("");
-  //     lastMsgTime = millis();
-  //   }
-  //   client.stop();
-  //   Serial.println("Client disconnected");
-  // }
-
-
-
 
   WiFiClient client = server.available();
   if (client) {
@@ -1359,74 +1222,10 @@ void loop() {
       }
 
       tempData += "\"}]";
-      //  wifiWorking("http://3.128.231.248/i-switch/standalone/switchOper.php", 1, 0, tempData);
     }
     poledSwitchStatus = 0;
     clear_data_array();
     clear_data();
   }
-  // delay(10000);
 
-
-
-  ////// POLLING
-  //        if (pollinStatus == 1)
-  // if (pollinStatus == 1) //&& poledSwitchStatus == 0) // if this one means start polling 3 - 30 now
-  // {
-
-  //     pollingSwbArray[0] = 0x80;
-  //     pollingSwbArray[1] = 0x40;
-  //     pollingSwbArray[2] = initiallSwbNo;
-  //     pollingSwbArray[3] = rx_data;
-  //     pollingSwbArray[4] = 0;
-  //     tx_address[4] = initiallSwbNo;
-  //     // printf("send to initial switch board: %d", initiallSwbNo);
-  //     nrf24_tx_address(tx_address);
-  //     txMode(pollingSwbArray);
-  //     if (nrf24_lastMessageStatus() == NRF24_TRANSMISSON_OK) // check auto acknowledge status if send successfully means it give ok
-  //     {
-  //         printf("polled done: ");
-  //         countRespSwb++;
-  //         pollingRespSwbArray[countRespSwb] = initiallSwbNo;
-  //         printf("%d\n", pollingRespSwbArray[countRespSwb]);
-  //         // poledSwitchStatus = 1;
-  //     }
-  //     else
-  //     {
-  //         printf("polled not done: ");
-  //         printf("%d\n", pollingRespSwbArray[countRespSwb + 1]);
-  //         poledSwitchStatus = 0;
-  //     }
-  //     // nRFPowerUp();
-
-  //     initiallSwbNo++;
-  //     // usleep(2000000);
-  // }
-
-  // if (initiallSwbNo == 30) // ones it reaches 48 board then send the stop command  now 48 we can increase how much we want  data is 0x80 0x02 0x02 0x00
-  // {
-  //     // printf("\nresponse received : \n");
-
-  //     pollinStatus = 0;
-  //     initiallSwbNo = 3; // its not switch board number when polling start 3 - 48 switch board for that
-  //     pollingRespSwbArray[0] = 0x80;
-  //     pollingRespSwbArray[1] = countRespSwb + 1;
-  //     pollingRespSwbArray[2] = 0x02;
-  //     pollingRespSwbArray[countRespSwb + 1] = rx_data;
-  //     pollingRespSwbArray[countRespSwb + 2] = 0x81;
-  //     pollingRespSwbArray[countRespSwb + 3] = 0x00;
-  //     // printf("response data");
-
-  //     for (unsigned int i = 0; i <= countRespSwb + 3; i++) // self storing data//
-  //     {
-  //         printf("%d ", pollingRespSwbArray[i]); // send this response to raspberry pi code
-  //     }
-
-  //     for (unsigned int i = 0; i < countRespSwb + 3; i++) // self storing data//
-  //     {
-  //         pollingRespSwbArray[i] = 0; // load the data information
-  //     }
-  //     countRespSwb = 2;
-  //     // clear_data();
-  // }
 }
